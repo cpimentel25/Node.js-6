@@ -1,10 +1,25 @@
 const express = require("express");
 const app = express();
 const port = 8080;
+const morgan = require('morgan')
 
 const URL = '/api/products';
 app.use(express.json());
+app.use(morgan('dev'));
 
+//morgam
+const Morgan = morgan((tokens, req, res) => {
+  return [
+    tokens.method(req, res),
+    tokens.url(req, res),
+    tokens.status(req, res),
+    tokens['response-time'](req, res), 'ms'
+  ].join(' ')
+})
+
+console.log(Morgan);
+
+//app
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
