@@ -2,9 +2,59 @@ const express = require("express");
 const app = express();
 const port = 8080;
 
+const URL = '/api/products';
+app.use(express.json());
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
+
 app.get("/api/products", (req, res) => {
   res.json({ products });
 });
+
+//Buscar un producto por 'id'
+app.get("/api/products/:id", (req, res) => {
+  const products_id = products.find(
+    (item) => item.id === parseInt(req.params.id)
+  );
+
+  if (!products_id) {
+    return res.status(404).send("El producto no se encuentra");
+  }
+
+  res.json(products_id);
+});
+
+//Eliminar un producto segun el 'id'
+app.delete("/api/products/:id", (req, res) => {
+  const products_id = products.find(
+    (item) => item.id === parseInt(req.params.id)
+  );
+
+  if (!products_id) {
+    return res.status(404).send("El producto no se encuentra");
+  }
+
+  const index = products.indexOf(products_id);
+  products.splice(index, 1);
+  res.json(products_id);
+});
+
+//Agregar productos metodo POST
+app.post(URL, (req, res) => {
+  const newProduct = req.body;
+
+  if(newProduct.title === undefined || newProduct.price === undefined){
+    return res.status(400).send("Estas enviando un mal req");
+  }else if(newProduct.title == newProduct.title){
+    return res.status(400).send("Este titulo ya existe");
+  }
+
+  newProduct.id = Math.floor(Math.random() * 100);
+  products.push(newProduct)
+  res.json(newProduct);
+})
 
 app.get("/info", (req, res) => {
   res.send(
@@ -14,11 +64,7 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/about", (req, res) => {
-    res.send({ about });
-  });
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  res.send({ about });
 });
 
 const products = [
@@ -72,34 +118,34 @@ const products = [
 ];
 
 const about = [
-    {
-        name: 'Camilo Pimentel Gomez',
-        age: 36,
-        email: 'cpimentel.0325@gmail.com',
-        phone: "455-408-5765",
-        city: 'Mountain View',
-        website: 'https://camilopimentel.com',
-        skills: [
-            {
-                name: 'JavaScript',
-                level: 'intermediate',
-            },
-            {
-                name: 'React',
-                level: 'intermediate',
-            },
-            {
-                name: 'NextJS',
-                level: 'intermediate',
-            },
-            {
-                name: 'Html',
-                levle: 'Advanced',
-            },
-            {
-                name: 'Css',
-                level: 'Advanced',
-            },
-        ],
-    },
-]
+  {
+    name: "Camilo Pimentel Gomez",
+    age: 36,
+    email: "cpimentel.0325@gmail.com",
+    phone: "455-408-5765",
+    city: "Mountain View",
+    website: "https://camilopimentel.com",
+    skills: [
+      {
+        name: "JavaScript",
+        level: "intermediate",
+      },
+      {
+        name: "React",
+        level: "intermediate",
+      },
+      {
+        name: "NextJS",
+        level: "intermediate",
+      },
+      {
+        name: "Html",
+        levle: "Advanced",
+      },
+      {
+        name: "Css",
+        level: "Advanced",
+      },
+    ],
+  },
+];
