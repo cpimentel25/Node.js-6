@@ -62,7 +62,7 @@ app.post(URL, (req, res) => {
 
   if(newProduct.title === undefined || newProduct.price === undefined){
     return res.status(400).send("Estas enviando un mal req");
-  }else if(newProduct.title == newProduct.title){
+  }else if(!!newProduct.title){
     return res.status(400).send("Este titulo ya existe");
   }
 
